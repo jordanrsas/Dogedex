@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hackaprende.dogedex.api.ApiResponseStatus
 import com.hackaprende.dogedex.databinding.ActivityDogListBinding
-import com.hackaprende.dogedex.dogdetail.DogDetailActivity
-import com.hackaprende.dogedex.dogdetail.DogDetailActivity.Companion.DOG_KEY
+import com.hackaprende.dogedex.dogdetail.DogDetailComposeActivity
+import com.hackaprende.dogedex.dogdetail.DogDetailComposeActivity.Companion.DOG_KEY
 
 private const val GRID_SPAN_COUNT = 3
 
@@ -31,7 +31,7 @@ class DogListActivity : AppCompatActivity() {
         val adapter = DogAdapter()
 
         adapter.setOnItemClickListener {
-            val intent = Intent(this, DogDetailActivity::class.java)
+            val intent = Intent(this, DogDetailComposeActivity::class.java)
             intent.putExtra(DOG_KEY, it)
             startActivity(intent)
         }

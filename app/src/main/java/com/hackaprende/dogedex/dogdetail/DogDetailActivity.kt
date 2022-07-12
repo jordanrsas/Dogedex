@@ -1,13 +1,11 @@
 package com.hackaprende.dogedex.dogdetail
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.hackaprende.dogedex.R
-import com.hackaprende.dogedex.api.ApiResponseStatus
 import com.hackaprende.dogedex.databinding.ActivityDogDetailBinding
 import com.hackaprende.dogedex.model.Dog
 
@@ -40,7 +38,7 @@ class DogDetailActivity : AppCompatActivity() {
         binding.dog = dog
         binding.dogImage.load(dog.imageUrl)
 
-        viewModel.status.observe(this) { status ->
+        /*viewModel.status.observe(this) { status ->
             when (status) {
                 is ApiResponseStatus.Error -> {
                     binding.loadingWheel.visibility = View.GONE
@@ -55,7 +53,7 @@ class DogDetailActivity : AppCompatActivity() {
                 }
                 else -> {}
             }
-        }
+        }*/
 
 
         binding.closeButton.setOnClickListener {

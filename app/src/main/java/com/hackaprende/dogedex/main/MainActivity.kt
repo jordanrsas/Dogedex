@@ -3,7 +3,6 @@ package com.hackaprende.dogedex.main
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.*
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -22,9 +21,9 @@ import com.hackaprende.dogedex.api.ApiResponseStatus
 import com.hackaprende.dogedex.api.ApiServiceInterceptor
 import com.hackaprende.dogedex.auth.LoginActivity
 import com.hackaprende.dogedex.databinding.ActivityMainBinding
-import com.hackaprende.dogedex.dogdetail.DogDetailActivity
-import com.hackaprende.dogedex.dogdetail.DogDetailActivity.Companion.DOG_KEY
-import com.hackaprende.dogedex.dogdetail.DogDetailActivity.Companion.IS_RECOGNITION_KEY
+import com.hackaprende.dogedex.dogdetail.DogDetailComposeActivity
+import com.hackaprende.dogedex.dogdetail.DogDetailComposeActivity.Companion.DOG_KEY
+import com.hackaprende.dogedex.dogdetail.DogDetailComposeActivity.Companion.IS_RECOGNITION_KEY
 import com.hackaprende.dogedex.doglist.DogListActivity
 import com.hackaprende.dogedex.machinelearning.DogRecognition
 import com.hackaprende.dogedex.model.Dog
@@ -125,7 +124,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openDogDetailActivity(dog: Dog) {
-        val intent = Intent(this, DogDetailActivity::class.java)
+        val intent = Intent(this, DogDetailComposeActivity::class.java)
         intent.putExtra(DOG_KEY, dog)
         intent.putExtra(IS_RECOGNITION_KEY, true)
         startActivity(intent)
