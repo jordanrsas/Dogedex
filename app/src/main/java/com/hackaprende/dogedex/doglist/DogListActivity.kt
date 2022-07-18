@@ -2,23 +2,51 @@ package com.hackaprende.dogedex.doglist
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import com.hackaprende.dogedex.api.ApiResponseStatus
-import com.hackaprende.dogedex.databinding.ActivityDogListBinding
 import com.hackaprende.dogedex.dogdetail.DogDetailComposeActivity
 import com.hackaprende.dogedex.dogdetail.DogDetailComposeActivity.Companion.DOG_KEY
+import com.hackaprende.dogedex.dogdetail.ui.theme.DogedexTheme
+import com.hackaprende.dogedex.model.Dog
 
-private const val GRID_SPAN_COUNT = 3
 
-class DogListActivity : AppCompatActivity() {
+class DogListActivity : ComponentActivity() {
 
-    private val dogListViewModel: DogListViewModel by viewModels()
+    private val viewModel: DogListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            val status = viewModel.status
+            DogedexTheme() {
+                val dogList = viewModel.dogList
+                DogListScreen(
+                    onNavigationIconClick = ::onNavigationIconClick,
+                    dogList = dogList.value,
+                    onDogClicked = ::openDogDetailActivity,
+                    status = status.value,
+                    onErrorDialogDismiss = ::resetApiResponseStatus
+                )
+            }
+        }
+    }
+
+    private fun resetApiResponseStatus() {
+        viewModel.resetApiResponseStatus()
+    }
+
+    private fun onNavigationIconClick() {
+        finish()
+    }
+
+    private fun openDogDetailActivity(dog: Dog) {
+        val intent = Intent(this, DogDetailComposeActivity::class.java)
+        intent.putExtra(DOG_KEY, dog)
+        startActivity(intent)
+    }
+
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityDogListBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -57,5 +85,5 @@ class DogListActivity : AppCompatActivity() {
                 else -> {}
             }
         }
-    }
+    }*/
 }

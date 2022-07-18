@@ -2,26 +2,30 @@ package com.hackaprende.dogedex.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import com.hackaprende.dogedex.main.MainActivity
 import com.hackaprende.dogedex.R
-import com.hackaprende.dogedex.api.ApiResponseStatus
-import com.hackaprende.dogedex.api.ApiServiceInterceptor
-import com.hackaprende.dogedex.databinding.ActivityLoginBinding
-import com.hackaprende.dogedex.model.User
+import com.hackaprende.dogedex.dogdetail.ui.theme.DogedexTheme
+import com.hackaprende.dogedex.main.MainActivity
 
-class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
+class LoginActivity : ComponentActivity(), LoginFragment.LoginFragmentActions,
     SignUpFragment.SignUpFragmentActions {
 
     private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityLoginBinding.inflate(layoutInflater)
+
+        setContent {
+            DogedexTheme {
+                loginScreen()
+            }
+        }
+
+        /*val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel.status.observe(this) { status ->
@@ -45,7 +49,7 @@ class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
                 ApiServiceInterceptor.setSessionToken(user.authenticationToken)
                 startMainActivity()
             }
-        }
+        }*/
     }
 
     private fun startMainActivity() {

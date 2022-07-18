@@ -26,6 +26,8 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberAsyncImagePainter
 import com.hackaprende.dogedex.R
 import com.hackaprende.dogedex.api.ApiResponseStatus
+import com.hackaprende.dogedex.composables.ErrorDialog
+import com.hackaprende.dogedex.composables.LoadingWheel
 import com.hackaprende.dogedex.model.Dog
 
 @ExperimentalCoilApi
@@ -70,8 +72,9 @@ fun DogDetailScreen(
         if (status is ApiResponseStatus.Loading) {
             LoadingWheel()
         } else if (status is ApiResponseStatus.Error) {
-            ErrorDialog(status = status,
-                onDialogDismiss = { onErrorDialogDismiss() })
+            ErrorDialog(
+                messageId = status.messageId
+            ) { onErrorDialogDismiss() }
         }
     }
 }
@@ -300,7 +303,7 @@ fun DogDetailScreenPreview() {
     })
 }
 
-@Composable
+/*@Composable
 fun LoadingWheel() {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -308,8 +311,8 @@ fun LoadingWheel() {
     ) {
         CircularProgressIndicator(color = Color.Red)
     }
-}
-
+}*/
+/*
 @Composable
 fun ErrorDialog(
     status: ApiResponseStatus.Error<Any>,
@@ -329,4 +332,4 @@ fun ErrorDialog(
             }
         }
     )
-}
+}*/
