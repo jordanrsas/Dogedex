@@ -24,6 +24,7 @@ import com.hackaprende.dogedex.composables.AuthField
 
 @Composable
 fun LoginScreen(
+    authViewModel: AuthViewModel,
     onLoginButtonClick: (email: String, passwor: String) -> Unit,
     onRegisterButtonClick: () -> Unit
 ) {
@@ -32,7 +33,12 @@ fun LoginScreen(
     ) {
         Content(
             onLoginButtonClick = onLoginButtonClick,
-            onRegisterButtonClick = onRegisterButtonClick
+            onRegisterButtonClick = {
+                onRegisterButtonClick()
+                authViewModel.resetErrors()
+            },
+            resetFieldErrors = { authViewModel.resetErrors() },
+            authViewModel = authViewModel
         )
     }
 }
@@ -40,7 +46,9 @@ fun LoginScreen(
 @Composable
 fun Content(
     onLoginButtonClick: (email: String, passwor: String) -> Unit,
-    onRegisterButtonClick: () -> Unit
+    onRegisterButtonClick: () -> Unit,
+    resetFieldErrors: () -> Unit,
+    authViewModel: AuthViewModel
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -60,7 +68,12 @@ fun Content(
             label = stringResource(id = R.string.email),
             text = email,
             modifier = Modifier.fillMaxWidth(),
-            onTextChanged = { newValue -> email = newValue })
+            onTextChanged = { newValue ->
+                email = newValue
+                resetFieldErrors()
+            },
+            errorMessageId = authViewModel.emailError
+        )
 
         AuthField(
             label = stringResource(id = R.string.password),
@@ -69,7 +82,12 @@ fun Content(
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             visualTransformation = PasswordVisualTransformation(),
-            onTextChanged = { newValue -> password = newValue })
+            onTextChanged = { newValue ->
+                password = newValue
+                resetFieldErrors()
+            },
+            errorMessageId = authViewModel.passwordError
+        )
 
         Button(modifier = Modifier
             .fillMaxWidth()

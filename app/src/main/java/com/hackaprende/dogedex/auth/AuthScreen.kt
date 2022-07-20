@@ -1,6 +1,7 @@
 package com.hackaprende.dogedex.auth
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,16 +15,27 @@ import com.hackaprende.dogedex.model.User
 
 @Composable
 fun AuthScreen(
-    status: ApiResponseStatus<User>?,
-    onLoginButtonClick: (email: String, password: String) -> Unit,
-    onSignUpButtonClick: (email: String, password: String, confirmPassword: String) -> Unit,
-    onErrorDialogDismiss: () -> Unit
+    onUserLoggedIn: (User) -> Unit,
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
+    val status = authViewModel.status
+    val user = authViewModel.user
+
+    val userValue = user
+    if (userValue != null) {
+        onUserLoggedIn(userValue)
+    }
+
     val navController = rememberNavController()
     AuthNavHost(
         navController = navController,
-        onSignUpButtonClick = onSignUpButtonClick,
-        onLoginButtonClick = onLoginButtonClick
+        authViewModel = authViewModel,
+        onSignUpButtonClick = { email, password, confirmPassword ->
+            authViewModel.signUp(email, password, confirmPassword)
+        },
+        onLoginButtonClick = { email, password ->
+            authViewModel.login(email, password)
+        }
     )
 
     if (status is ApiResponseStatus.Loading) {
@@ -31,13 +43,14 @@ fun AuthScreen(
     } else if (status is ApiResponseStatus.Error) {
         ErrorDialog(
             messageId = status.messageId
-        ) { onErrorDialogDismiss() }
+        ) { authViewModel.resetApiResponseStatus() }
     }
 }
 
 @Composable
 private fun AuthNavHost(
     navController: NavHostController,
+    authViewModel: AuthViewModel,
     onLoginButtonClick: (email: String, password: String) -> Unit,
     onSignUpButtonClick: (email: String, password: String, confirmPassword: String) -> Unit
 ) {
@@ -47,6 +60,7 @@ private fun AuthNavHost(
     ) {
         composable(route = LoginScreenDestination) {
             LoginScreen(
+                authViewModel = authViewModel,
                 onRegisterButtonClick = {
                     navController.navigate(route = SignUpScreenDestination)
                 },
@@ -56,6 +70,7 @@ private fun AuthNavHost(
 
         composable(route = SignUpScreenDestination) {
             SignUpScreen(
+                authViewModel = authViewModel,
                 onNavigationIconClick = {
                     navController.navigateUp()
                 },
