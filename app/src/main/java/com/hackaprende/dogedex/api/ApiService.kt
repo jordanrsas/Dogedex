@@ -8,21 +8,7 @@ import com.hackaprende.dogedex.api.responses.AuthApiResponse
 import com.hackaprende.dogedex.api.responses.DefaultResponse
 import com.hackaprende.dogedex.api.responses.DogApiResponse
 import com.hackaprende.dogedex.api.responses.DogListApiResponse
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
-
-private val okHttpClient = OkHttpClient
-    .Builder()
-    .addInterceptor(ApiServiceInterceptor)
-    .build()
-
-private val retrofit = Retrofit.Builder()
-    .client(okHttpClient)
-    .baseUrl(BASE_URL)
-    .addConverterFactory(MoshiConverterFactory.create())
-    .build()
 
 interface ApiService {
     @GET(GET_ALL_DOGS_URL)
@@ -45,10 +31,4 @@ interface ApiService {
     @GET(GET_DOG_BY_ML_ID)
     suspend fun getDogByMlId(@Query("ml_id") mlId: String): DogApiResponse
 
-}
-
-object DogsApi {
-    val retrofitService: ApiService by lazy {
-        retrofit.create(ApiService::class.java)
-    }
 }

@@ -1,61 +1,47 @@
 package com.hackaprende.dogedex.doglist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hackaprende.dogedex.api.ApiResponseStatus
 import com.hackaprende.dogedex.model.Dog
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DogListViewModel : ViewModel() {
+@HiltViewModel
+class DogListViewModel @Inject constructor(
+    private val dogRepository: DogTasks
+) : ViewModel() {
 
-    private val _dogList = MutableLiveData<List<Dog>>()
-    val dogList: LiveData<List<Dog>>
-        get() = _dogList
+    var dogList by mutableStateOf<List<Dog>>(listOf())
+        private set
 
-    private val _status = MutableLiveData<ApiResponseStatus<Any>?>(null)
-    val status: LiveData<ApiResponseStatus<Any>?>
-        get() = _status
-
-    private val dogRepository = DogRepository()
+    var status by mutableStateOf<ApiResponseStatus<Any>?>(null)
+        private set
 
     init {
-        //downloadDogs()
-        //downloadUserDogs()
         getDogCollection()
     }
 
     private fun getDogCollection() {
         viewModelScope.launch {
-            _status.value = ApiResponseStatus.Loading()
+            status = ApiResponseStatus.Loading()
             handleResponseStatus(dogRepository.getDogCollection())
         }
     }
 
-    /*
-    private fun downloadUserDogs() {
-        viewModelScope.launch {
-            _status.value = ApiResponseStatus.Loading()
-            handleResponseStatus(dogRepository.getUserDogs())
-        }
+    fun resetApiResponseStatus() {
+        status = null
     }
-
-    private fun downloadDogs() {
-        viewModelScope.launch {
-            _status.value = ApiResponseStatus.Loading()
-            handleResponseStatus(dogRepository.downloadDogs())
-        }
-    }
-    */
 
     @Suppress("UNCHECKED_CAST")
     private fun handleResponseStatus(apiResponseStatus: ApiResponseStatus<List<Dog>>) {
         if (apiResponseStatus is ApiResponseStatus.Success) {
-            _dogList.value = apiResponseStatus.data
+            dogList = apiResponseStatus.data
         }
-        _status.value = apiResponseStatus as ApiResponseStatus<Any>
+        status = apiResponseStatus as ApiResponseStatus<Any>
     }
-
-
 }
