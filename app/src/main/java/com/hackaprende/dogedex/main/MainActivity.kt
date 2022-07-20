@@ -14,8 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import com.hackaprende.dogedex.LABEL_PATH
-import com.hackaprende.dogedex.MODEL_PATH
 import com.hackaprende.dogedex.R
 import com.hackaprende.dogedex.api.ApiResponseStatus
 import com.hackaprende.dogedex.api.ApiServiceInterceptor
@@ -29,11 +27,12 @@ import com.hackaprende.dogedex.machinelearning.DogRecognition
 import com.hackaprende.dogedex.model.Dog
 import com.hackaprende.dogedex.model.User
 import com.hackaprende.dogedex.settings.SettingsActivity
-import org.tensorflow.lite.support.common.FileUtil
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher =
@@ -50,22 +49,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageCapture: ImageCapture
     private lateinit var cameraExecutor: ExecutorService
 
-    //private lateinit var classifier: Classifier
     private var isCameraReady = false
     private val viewModel: MainViewModel by viewModels()
-
-    override fun onStart() {
-        super.onStart()
-        /*classifier = Classifier(
-            FileUtil.loadMappedFile(this@MainActivity, MODEL_PATH),
-            FileUtil.loadLabels(this@MainActivity, LABEL_PATH)
-        )*/
-
-        viewModel.setUpClassifier(
-            FileUtil.loadMappedFile(this@MainActivity, MODEL_PATH),
-            FileUtil.loadLabels(this@MainActivity, LABEL_PATH)
-        )
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,12 +72,6 @@ class MainActivity : AppCompatActivity() {
         binding.dogListFab.setOnClickListener {
             openDogListActivity()
         }
-
-        /*binding.takePhotoFab.setOnClickListener {
-            if (isCameraReady) {
-                takePhoto()
-            }
-        }*/
 
         viewModel.status.observe(this) { status ->
             when (status) {

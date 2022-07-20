@@ -42,8 +42,8 @@ fun DogListScreen(
     viewModel: DogListViewModel = hiltViewModel(),
 ) {
 
-    val status = viewModel.status.value
-    val dogList = viewModel.dogList.value
+    val status = viewModel.status
+    val dogList = viewModel.dogList
 
     Scaffold(
         topBar = { DogListScreenTopBar(onNavigationIconClick) }
@@ -51,9 +51,9 @@ fun DogListScreen(
         LazyVerticalGrid(cells = GridCells.Fixed(GRID_SPAN_COUNT),
             content =
             {
-                items(dogList) {
+                items(dogList) { dogItem ->
                     DogGridItem(
-                        dog = it,
+                        dog = dogItem,
                         onDogClicked = onDogClicked
                     )
                 }

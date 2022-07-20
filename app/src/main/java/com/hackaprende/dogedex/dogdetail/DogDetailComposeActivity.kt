@@ -13,7 +13,9 @@ import com.hackaprende.dogedex.R
 import com.hackaprende.dogedex.api.ApiResponseStatus
 import com.hackaprende.dogedex.dogdetail.ui.theme.DogedexTheme
 import com.hackaprende.dogedex.model.Dog
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DogDetailComposeActivity : ComponentActivity() {
 
     companion object {

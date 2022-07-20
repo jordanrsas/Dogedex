@@ -14,7 +14,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor() : ViewModel() {
+class AuthViewModel @Inject constructor(
+    private val authRepository: AuthTasks
+) : ViewModel() {
 
     var user by mutableStateOf<User?>(null)
         private set
@@ -30,8 +32,6 @@ class AuthViewModel @Inject constructor() : ViewModel() {
 
     var confirmPasswordError by mutableStateOf<Int?>(null)
         private set
-
-    private val authRepository = AuthRepository()
 
     fun login(email: String, password: String) {
         when {
