@@ -13,12 +13,9 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.sharp.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -29,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.hackaprende.dogedex.R
 import com.hackaprende.dogedex.api.ApiResponseStatus
+import com.hackaprende.dogedex.composables.BackNavigationIcon
 import com.hackaprende.dogedex.composables.ErrorDialog
 import com.hackaprende.dogedex.composables.LoadingWheel
 import com.hackaprende.dogedex.model.Dog
@@ -146,12 +144,3 @@ fun DogListScreenTopBar(
     )
 }
 
-@Composable
-fun BackNavigationIcon(onClick: () -> Unit) {
-    IconButton(onClick = onClick) {
-        Icon(
-            painter = rememberVectorPainter(image = Icons.Sharp.ArrowBack),
-            contentDescription = null
-        )
-    }
-}

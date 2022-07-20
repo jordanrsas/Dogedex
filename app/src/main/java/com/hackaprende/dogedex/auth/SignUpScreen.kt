@@ -1,6 +1,5 @@
 package com.hackaprende.dogedex.auth
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,30 +19,31 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hackaprende.dogedex.R
+import com.hackaprende.dogedex.api.ApiResponseStatus
 import com.hackaprende.dogedex.composables.AuthField
+import com.hackaprende.dogedex.composables.BackNavigationIcon
 
 @Composable
-fun LoginScreen(
-    onLoginButtonClick: (email: String, passwor: String) -> Unit,
-    onRegisterButtonClick: () -> Unit
+fun SignUpScreen(
+    onSignUpButtonClick: (email: String, password: String, confirmPassword: String) -> Unit,
+    onNavigationIconClick: () -> Unit,
 ) {
     Scaffold(
-        topBar = { LoginScreenToolBar() }
+        topBar = { SignUpScreenTopBar(onNavigationIconClick) }
     ) {
         Content(
-            onLoginButtonClick = onLoginButtonClick,
-            onRegisterButtonClick = onRegisterButtonClick
+            onSignUpButtonClick = onSignUpButtonClick
         )
     }
 }
 
 @Composable
 fun Content(
-    onLoginButtonClick: (email: String, passwor: String) -> Unit,
-    onRegisterButtonClick: () -> Unit
+    onSignUpButtonClick: (email: String, password: String, confirmPassword: String) -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -59,7 +59,8 @@ fun Content(
         AuthField(
             label = stringResource(id = R.string.email),
             text = email,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
             onTextChanged = { newValue -> email = newValue })
 
         AuthField(
@@ -71,46 +72,37 @@ fun Content(
             visualTransformation = PasswordVisualTransformation(),
             onTextChanged = { newValue -> password = newValue })
 
+        AuthField(
+            label = stringResource(id = R.string.confirm_password),
+            text = confirmPassword,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            visualTransformation = PasswordVisualTransformation(),
+            onTextChanged = { newValue -> confirmPassword = newValue })
+
         Button(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
-            .semantics { testTag = "login-button" },
-            onClick = {
-                onLoginButtonClick(email, password)
-            }) {
+            .semantics { testTag = "signup-button" },
+            onClick = { onSignUpButtonClick(email, password, confirmPassword) }) {
             Text(
-                stringResource(R.string.login),
+                stringResource(R.string.sign_up),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Medium
             )
         }
-
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            textAlign = TextAlign.Center,
-            text = stringResource(R.string.do_not_have_an_account)
-        )
-
-        Text(
-            modifier = Modifier
-                .clickable(enabled = true, onClick = { onRegisterButtonClick() })
-                .fillMaxWidth()
-                .padding(16.dp)
-                .semantics { testTag = "login-screen-register-button" },
-            text = stringResource(R.string.register),
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Medium
-        )
     }
 }
 
 @Composable
-fun LoginScreenToolBar() {
+fun SignUpScreenTopBar(
+    onNavigationIconClick: () -> Unit
+) {
     TopAppBar(
         title = { Text(stringResource(R.string.app_name)) },
         backgroundColor = Color.Red,
-        contentColor = Color.White
+        contentColor = Color.White,
+        navigationIcon = { BackNavigationIcon(onNavigationIconClick) }
     )
 }
